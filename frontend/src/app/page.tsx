@@ -21,6 +21,7 @@ export default function Home() {
         mines={mines}
         setSize={setSize}
         setMines={setMines}
+        setStarted={setStarted}
         started = {started}
         onStart={() => setStarted(true)}
       />

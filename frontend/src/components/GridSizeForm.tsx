@@ -6,10 +6,11 @@ interface GridSizeFormProps {
   started: boolean;
   setSize: (n: number) => void;
   setMines: (n: number) => void;
+  setStarted: (b: boolean) => void;
   onStart: () => void;
 }
 
-export const GridSizeForm: React.FC<GridSizeFormProps> = ({ size, mines, started, setSize, setMines, onStart }) => {
+export const GridSizeForm: React.FC<GridSizeFormProps> = ({ size, mines, started, setSize, setMines, setStarted, onStart }) => {
   return (
     <form
       className="grid grid-rows-4 gap-4 items-center justify-center mb-4 relative"
@@ -44,7 +45,7 @@ export const GridSizeForm: React.FC<GridSizeFormProps> = ({ size, mines, started
       <div className="flex w-full justify-center items-center gap-4 ">
         <button
           type="submit"
-          className={`bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 transition${started ? ' opacity-40 cursor-not-allowed' : ''}`}
+          className={`bg-blue-600 text-white px-4 py-2 rounded ${started ? ' transition opacity-40 cursor-not-allowed' : 'cursor-pointer hover:bg-blue-700'}`}
           disabled={started}
         >
           Start Game
@@ -55,6 +56,7 @@ export const GridSizeForm: React.FC<GridSizeFormProps> = ({ size, mines, started
           onClick={() => {
             setSize(10);
             setMines(10);
+            setStarted(false);
           }}
           disabled={!started}  
         >End Game</button>
