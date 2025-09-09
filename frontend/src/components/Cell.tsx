@@ -12,7 +12,7 @@ export interface CellProps {
 export const Cell: React.FC<CellProps> = ({ value, revealed, flagged, onClick, onRightClick }) => {
   return (
     <motion.button
-      className={`w-8 h-8 sm:w-10 sm:h-10 border border-gray-400 flex items-center justify-center text-lg font-bold select-none
+      className={`w-8 h-8 sm:w-10 sm:h-10 border border-gray-200 rounded-lg flex items-center justify-center text-lg font-bold select-none
         ${revealed ? "bg-gray-200" : "bg-gray-500 transition hover:bg-gray-400"}`}
       onClick={onClick}
       onContextMenu={onRightClick}

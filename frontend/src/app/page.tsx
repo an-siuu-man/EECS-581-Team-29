@@ -2,6 +2,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { GridSizeForm } from "../components/GridSizeForm";
+import { start } from "repl";
 
 const MinesweeperBoard = dynamic(() => import("../components/MinesweeperBoard"), { ssr: false });
 
@@ -11,8 +12,8 @@ export default function Home() {
   const [started, setStarted] = useState(false);
 
   return (
-    <main className="font-sans flex flex-col items-center min-h-screen p-8 pb-20 gap-8 sm:p-20 bg-gradient-to-br from-gray-100 to-blue-100 dark:from-gray-900 dark:to-blue-950">
-      <h1 className="text-4xl sm:text-6xl font-extrabold text-center mb-2">
+    <main className="font-inter flex flex-col items-center min-h-screen p-8 pb-20 gap-8 sm:p-20 bg-gradient-to-br from-gray-100 to-blue-100 dark:from-gray-900 dark:to-blue-950">
+      <h1 className="font-dm-sans text-4xl sm:text-6xl font-extrabold text-center mb-2">
         Minesweepers of the Midwest
       </h1>
       <GridSizeForm
@@ -20,13 +21,14 @@ export default function Home() {
         mines={mines}
         setSize={setSize}
         setMines={setMines}
+        started = {started}
         onStart={() => setStarted(true)}
       />
       {started && (
         <MinesweeperBoard size = {size} mines={mines} />
       )}
       <footer className="mt-8 text-center text-xs text-gray-500">
-        &copy; {new Date().getFullYear()} Team 29
+        &copy; {new Date().getFullYear()} EECS 581 Team 29
       </footer>
     </main>
   );

@@ -6,7 +6,7 @@ export default function MinesweeperBoard({ size, mines }: { size: number, mines:
   return (
     <div className="flex flex-col items-center gap-4">
       <motion.div
-        className="grid bg-gray-300 rounded shadow-lg"
+        className="grid bg-gray-300 rounded shadow-lg p-1"
         style={{ gridTemplateRows: `repeat(${size}, minmax(0, 1fr))`, gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
