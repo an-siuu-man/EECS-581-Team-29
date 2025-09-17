@@ -1,6 +1,6 @@
 #### Tasks: 
 - [ ] User stories
-- [ ] System architecture
+- [x] System architecture
 - [ ] project-hours
-- [ ] Initial task assignments
-- [ ] tech stack finalization
+- [x] Initial task assignments
+- [x] tech stack finalization
