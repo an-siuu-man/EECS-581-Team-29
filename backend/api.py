@@ -70,7 +70,7 @@ def game_payload(game_id):
     remaining = g["mines"] - placed_flag_count(g["board"])
     return {
         "game_id": game_id,
-        "status": g["status"],                       # "Playing" | "Game Over: Loss" | "Victory"
+        "status": g["status"],                       # "Playing" | "Game Lost" | "Victory"
         "width": g["width"],
         "height": g["height"],
         "mines": g["mines"],
@@ -149,7 +149,7 @@ def reveal(gid):
 
     res = reveal_cell(g["board"], r, c, g["width"], g["height"])
     if res == "boom":
-        g["status"] = "Game Over: Loss"
+        g["status"] = "Game Lost"
     elif is_win(g["board"]):
         g["status"] = "Victory"
 
