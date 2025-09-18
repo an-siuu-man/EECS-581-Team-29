@@ -1,11 +1,11 @@
-import Minesweeper from "@/components/Minesweeper";
 "use client";
+import Minesweeper from "@/components/Minesweeper";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { GridSizeForm } from "../components/GridSizeForm";
 import { start } from "repl";
 
-const MinesweeperBoard = dynamic(() => import("../components/MinesweeperBoard"), { ssr: false });
+// const MinesweeperBoard = dynamic(() => import("../components/MinesweeperBoard"), { ssr: false });
 
 export default function Home() {
   const [size, setSize] = useState(10);
