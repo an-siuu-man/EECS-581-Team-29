@@ -1,10 +1,11 @@
 "use client";
+import Minesweeper from "@/components/Minesweeper";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { GridSizeForm } from "../components/GridSizeForm";
 import { start } from "repl";
 
-const MinesweeperBoard = dynamic(() => import("../components/MinesweeperBoard"), { ssr: false });
+// const MinesweeperBoard = dynamic(() => import("../components/MinesweeperBoard"), { ssr: false });
 
 export default function Home() {
   const [size, setSize] = useState(10);
@@ -25,9 +26,7 @@ export default function Home() {
         started = {started}
         onStart={() => setStarted(true)}
       />
-      {started && (
-        <MinesweeperBoard size = {size} mines={mines} />
-      )}
+      <Minesweeper defaultMines={15} safeNeighbors={true} />
       <footer className="mt-8 text-center text-xs text-gray-500">
         &copy; {new Date().getFullYear()} EECS 581 Team 29
       </footer>
