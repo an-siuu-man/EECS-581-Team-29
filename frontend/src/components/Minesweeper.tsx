@@ -99,16 +99,28 @@ export default function Minesweeper({ defaultMines = 15, safeNeighbors = true }:
   };
 
   return (
-    <div className="max-w-screen-md mx-auto p-4 space-y-4">
+    <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Minesweepers of the midwest</h1>
-        <div className="flex items-center gap-2">
-          <span className="text-sm px-2 py-1 rounded bg-gray-100 text-black">
-            Status: <strong>{state?.status ?? "..."}</strong>
+        <div className="flex flex-col items-start gap-2">
+        <div className="flex items-center gap-3">
+          <label className="text-sm">Mines:</label>
+            <div className="flex gap-2">
+              {[10, 12, 15, 18, 20].map((m) => (
+                <button
+                  key={m}
+                  onClick={() => newGame(m)}
+                  className={`px-3 py-1 rounded border hover:bg-gray-50`}
+                  disabled={loading}
+                  title={`Start new game with ${m} mines`}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+                      <span className="text-sm px-2 py-1 rounded bg-gray-100 text-black">
+            Flags remaining: <strong>{state?.remaining_mines ?? "-"}</strong>
           </span>
-          <span className="text-sm px-2 py-1 rounded bg-gray-100 text-black">
-            Remaining: <strong>{state?.remaining_mines ?? "-"}</strong>
-          </span>
+        </div>
           <button
             onClick={() => newGame(defaultMines)}
             className="px-3 py-1 rounded bg-black text-white hover:opacity-90 disabled:opacity-50"
@@ -116,24 +128,6 @@ export default function Minesweeper({ defaultMines = 15, safeNeighbors = true }:
           >
             New Game
           </button>
-        </div>
-      </div>
-
-      {/* Mine selector (10..20) */}
-      <div className="flex items-center gap-3">
-        <label className="text-sm">Mines:</label>
-        <div className="flex gap-2">
-          {[10, 12, 15, 18, 20].map((m) => (
-            <button
-              key={m}
-              onClick={() => newGame(m)}
-              className="px-3 py-1 rounded border hover:bg-gray-50"
-              disabled={loading}
-              title={`Start new game with ${m} mines`}
-            >
-              {m}
-            </button>
-          ))}
         </div>
       </div>
 
@@ -152,7 +146,10 @@ export default function Minesweeper({ defaultMines = 15, safeNeighbors = true }:
         aria-label="Minesweeper grid"
       >
         {state ? (
-          <div className="grid" style={{ gridTemplateColumns: `repeat(${state.width}, 2.25rem)` }}>
+          <div
+            className="grid bg-gray-100 rounded-xl shadow-lg p-2 border border-gray-300"
+            style={{ gridTemplateColumns: `repeat(${state.width}, 2.5rem)` }}
+          >
             {state.board.map((row, r) =>
               row.map((cell, c) => {
                 const isCovered = cell === ".";
@@ -163,20 +160,14 @@ export default function Minesweeper({ defaultMines = 15, safeNeighbors = true }:
                 const contentStr = String(content);
                 const isNumber = /^[1-8]$/.test(contentStr);
 
-                const base =
-                  "w-9 h-9 flex items-center justify-center text-sm font-semibold border rounded outline-none focus:ring-2 focus:ring-black/50";
-                const covered = "bg-gray-200 hover:bg-gray-300 cursor-pointer";
-                const revealedPlain = "bg-white text-black";
-                const bomb = "bg-red-600 text-white border-red-700";
-                const flag = "bg-yellow-500 text-black border-yellow-600";
+                // Tailwind cell styles
+                let cls = "w-10 h-10 flex items-center justify-center text-base font-bold border border-gray-400 rounded-lg transition-all duration-150 outline-none focus:ring-2 focus:ring-blue-400";
+                if (isCovered) cls += " bg-gray-200 hover:bg-gray-300 active:bg-gray-400 cursor-pointer";
+                else if (isBomb) cls += " bg-red-600 text-white border-red-700 animate-pulse";
+                else if (isFlag) cls += " bg-yellow-400 text-black border-yellow-500";
+                else cls += " bg-white text-black";
 
-                let cls = base + " ";
-                if (isCovered) cls += covered;
-                else if (isBomb) cls += bomb;
-                else if (isFlag) cls += flag;
-                else cls += revealedPlain; // keep revealed cells white
-
-                // If revealed & a number, override just the text color
+                // Number coloring
                 if (!isCovered && !isBomb && !isFlag && isNumber) {
                   cls += " " + numberTextColor(contentStr);
                 }

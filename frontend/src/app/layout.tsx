@@ -20,7 +20,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body
         className={[
           // Choose ONE primary text face to be your default; keep others available as CSS vars
-          "font-sans antialiased bg-white text-gray-900",
+          "font-sans antialiased ",
           inter.variable,             // default text face
           geistSans.variable,         // optional heading face
           geistMono.variable,         // optional mono
@@ -29,9 +29,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           lexendDeca.variable,
         ].join(" ")}
       >
-        <div className="min-h-dvh flex items-start sm:items-center justify-center p-4">
           {children}
-        </div>
       </body>
     </html>
   );
