@@ -89,6 +89,7 @@ def create_game():
     width  = int(data.get("width",  DEFAULT_WIDTH))
     height = int(data.get("height", DEFAULT_HEIGHT))
     mines  = int(data.get("mines", 10))            # must be 10..20 per your rules
+    ai_mode = data.get("ai_mode", "No AI")
     safe_neighbors = bool(data.get("safe_neighbors", True))  # first click safe zone includes neighbors
 
     # Enforce your rules
@@ -141,6 +142,8 @@ def reveal(gid):
     try:
         r = int(data["row"])
         c = int(data["col"])
+        ai_mode = data["ai_mode"]
+        print(f"The AI Mode is {ai_mode}")
     except Exception:
         return corsify(jsonify({"error": "row and col (0-based) are required"})), 400
 
@@ -170,6 +173,8 @@ def flag(gid):
     try:
         r = int(data["row"])
         c = int(data["col"])
+        ai_mode = data["ai_mode"]
+        print(f"The AI Mode is {ai_mode}")
     except Exception:
         return corsify(jsonify({"error": "row and col (0-based) are required"})), 400
 

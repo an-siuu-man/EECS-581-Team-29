@@ -2,18 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { createGame, getState, reveal, flag, GameState, BoardCell } from "@/lib/api";
-
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 type Props = {
   defaultMines?: number;   // 10..20
   safeNeighbors?: boolean; // true = first click protects neighbors too
 };
+interface Difficulty {
+  name: string
+  selected: boolean
+}
+
+let Difficulties: Difficulty[] = [
+  {name: "No AI", selected: true},
+  {name: "Easy AI", selected: false},
+  {name: "Medium AI", selected: false},
+  {name: "Hard AI", selected: false}
+]
 
 export default function Minesweeper({ defaultMines = 15, safeNeighbors = true }: Props) {
   const [gameId, setGameId] = useState<string | null>(null);
   const [state, setState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  const [selectedDifficulty, setSelectedDifficulty] = useState("No AI")
   // Start new game
   const newGame = async (mines = defaultMines) => {
     try {
@@ -39,7 +51,7 @@ export default function Minesweeper({ defaultMines = 15, safeNeighbors = true }:
     if (!gameId || !state || state.status !== "Playing") return;
     try {
       setLoading(true);
-      const s = await reveal(gameId, r, c);
+      const s = await reveal(gameId, r, c, selectedDifficulty);
       setState(s);
     } catch (e: any) {
       setErrorMsg(e.message ?? "Reveal failed");
@@ -52,7 +64,7 @@ export default function Minesweeper({ defaultMines = 15, safeNeighbors = true }:
     if (!gameId || !state || state.status !== "Playing") return;
     try {
       setLoading(true);
-      const s = await flag(gameId, r, c);
+      const s = await flag(gameId, r, c, selectedDifficulty);
       setState(s);
     } catch (e: any) {
       setErrorMsg(e.message ?? "Flag failed");
@@ -102,6 +114,19 @@ export default function Minesweeper({ defaultMines = 15, safeNeighbors = true }:
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex flex-col items-start gap-2">
+        <div className="flex items-center gap-3">
+          <Stack spacing={2} direction="row">
+            {
+              Difficulties.map((difficulty) => 
+              <Button 
+              variant={(difficulty.name == selectedDifficulty) ? "contained" : "outlined"}
+              onClick={(event) => setSelectedDifficulty(difficulty.name)}
+              >{difficulty.name}
+              </Button>
+            )
+            }
+          </Stack>
+        </div>
         <div className="flex items-center gap-3">
           <label className="text-sm">Mines:</label>
             <div className="flex gap-2">
