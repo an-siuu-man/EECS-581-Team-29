@@ -1,4 +1,5 @@
 # backend/sound_manager.py
+os.environ["SDL_AUDIODRIVER"] = "dummy"
 import pygame
 import os
 
