@@ -1,4 +1,4 @@
-#sound_manager.py
+# backend/sound_manager.py
 import pygame
 import os
 
