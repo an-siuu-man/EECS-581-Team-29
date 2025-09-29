@@ -21,10 +21,8 @@ class SoundManager:
             print(f"Sound '{name}' not loaded.")
 
     def stop(self, name: str):
-        """Stop a playing sound."""
         if name in self.sounds:
             self.sounds[name].stop()
 
     def stop_all(self):
-        """Stop all sounds."""
         pygame.mixer.stop()
