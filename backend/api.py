@@ -6,7 +6,7 @@ from board import (
     create_board, reveal_cell, toggle_flag, is_win, placed_flag_count, neighbors
 )
 from bombs import place_mines, compute_numbers
-
+from sound_manager import SoundManager
 app = Flask(__name__)
 
 # In-memory game store: game_id -> game dict
@@ -110,6 +110,8 @@ def create_game():
         "safe_neighbors": safe_neighbors,
     }
     return corsify(jsonify({"game_id": gid, "status": "Playing"})), 201
+    sound.play("start")
+
 
 @app.route("/games/<gid>", methods=["GET", "DELETE", "OPTIONS"])
 def game_state(gid):
@@ -153,8 +155,10 @@ def reveal(gid):
     res = reveal_cell(g["board"], r, c, g["width"], g["height"])
     if res == "boom":
         g["status"] = "Game Lost"
+        sound.play("bomb")
     elif is_win(g["board"]):
         g["status"] = "Victory"
+        sound.play("win")
 
     return corsify(jsonify(game_payload(gid)))
 
@@ -181,8 +185,16 @@ def flag(gid):
     ok = toggle_flag(g["board"], r, c, g["width"], g["height"])
     if not ok:
         return corsify(jsonify({"error": "cannot flag/unflag a revealed cell"})), 400
-
+    sound.play("flag")
     return corsify(jsonify(game_payload(gid)))
+
+"""Initializing SoundMAnager"""
+sound = SoundManager()
+sound.load_sound("start", "backend/sounds/game_start.mp3")
+sound.load_sound("flag", "backend/sounds/flag.mp3")
+sound.load_sound("bomb", "backend/sounds/explosion.mp3")
+sound.load_sound("win", "backend/sounds/victory.mp3")
+
 
 if __name__ == "__main__":
     # Run on port 8000 to avoid clashing with Next.js 3000
