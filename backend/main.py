@@ -1,4 +1,4 @@
-from sound_manager import SoundManager
+
 from board import (
     create_board, print_board, print_status, parse_coord,
     reveal_cell, toggle_flag, is_win, placed_flag_count, neighbors
@@ -76,7 +76,7 @@ def main():
             if not toggle_flag(board, r, c, WIDTH, HEIGHT):
                 print("Cannot flag/unflag a revealed cell.")
             else:
-                sound.play("flag")
+            
         else:
             if not mines_placed:
                 safe_zone = get_safe_zone(r, c, WIDTH, HEIGHT)
@@ -87,10 +87,10 @@ def main():
             result = reveal_cell(board, r, c, WIDTH, HEIGHT)
             if result == "boom":
                 status = "Game Over: Loss"
-                sound.play("bomb")
+                
             elif is_win(board):
                 status = "Victory"
-                sound.play("win")
+                
 
     print_status(total_mines, placed_flag_count(board), status)
     print_board(board, WIDTH, HEIGHT, reveal_all=True)
@@ -100,13 +100,6 @@ def main():
         print("💥 Boom! You hit a mine.")
     print("Thanks for playing!")
 
-'''SoundInitialization'''
-
-sound = SoundManager()
-sound.load_sound("start", "backend/sounds/game_start.mp3")
-sound.load_sound("flag", "backend/sounds/flag.mp3")
-sound.load_sound("bomb", "backend/sounds/explosion.mp3")
-sound.load_sound("win", "backend/sounds/victory.mp3")
 
 
 
