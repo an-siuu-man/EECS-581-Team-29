@@ -6,7 +6,6 @@ from board import (
     create_board, reveal_cell, toggle_flag, is_win, placed_flag_count, neighbors
 )
 from bombs import place_mines, compute_numbers
-
 app = Flask(__name__)
 
 # In-memory game store: game_id -> game dict
@@ -89,6 +88,7 @@ def create_game():
     width  = int(data.get("width",  DEFAULT_WIDTH))
     height = int(data.get("height", DEFAULT_HEIGHT))
     mines  = int(data.get("mines", 10))            # must be 10..20 per your rules
+    ai_mode = data.get("ai_mode", "No AI")
     safe_neighbors = bool(data.get("safe_neighbors", True))  # first click safe zone includes neighbors
 
     # Enforce your rules
@@ -109,6 +109,8 @@ def create_game():
         "safe_neighbors": safe_neighbors,
     }
     return corsify(jsonify({"game_id": gid, "status": "Playing"})), 201
+   
+
 
 @app.route("/games/<gid>", methods=["GET", "DELETE", "OPTIONS"])
 def game_state(gid):
@@ -141,6 +143,8 @@ def reveal(gid):
     try:
         r = int(data["row"])
         c = int(data["col"])
+        ai_mode = data["ai_mode"]
+        print(f"The AI Mode is {ai_mode}")
     except Exception:
         return corsify(jsonify({"error": "row and col (0-based) are required"})), 400
 
@@ -150,8 +154,10 @@ def reveal(gid):
     res = reveal_cell(g["board"], r, c, g["width"], g["height"])
     if res == "boom":
         g["status"] = "Game Lost"
+        
     elif is_win(g["board"]):
         g["status"] = "Victory"
+        
 
     return corsify(jsonify(game_payload(gid)))
 
@@ -170,14 +176,18 @@ def flag(gid):
     try:
         r = int(data["row"])
         c = int(data["col"])
+        ai_mode = data["ai_mode"]
+        print(f"The AI Mode is {ai_mode}")
     except Exception:
         return corsify(jsonify({"error": "row and col (0-based) are required"})), 400
 
     ok = toggle_flag(g["board"], r, c, g["width"], g["height"])
     if not ok:
         return corsify(jsonify({"error": "cannot flag/unflag a revealed cell"})), 400
-
+    
     return corsify(jsonify(game_payload(gid)))
+
+
 
 if __name__ == "__main__":
     # Run on port 8000 to avoid clashing with Next.js 3000
